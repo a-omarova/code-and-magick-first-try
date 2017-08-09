@@ -7,7 +7,6 @@
 _Не удаляйте и не обращайте внимание на папки и файлы:_<br>
 _`.editorconfig`, `.eslintrc`, `.gitattributes`, `.gitignore`, `.travis.yml`, `package.json`._
 
-test
 
 ---
 
