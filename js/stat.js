@@ -26,8 +26,6 @@ window.renderStatistics = function (ctx, names, times) {
 
   var histogramHeight = 150; // px;
   var step = histogramHeight / (max - 0); // px;
-  // console.log(step);
-  // console.log('Худшее время: ', max, 'мс у игрока ', names[maxIndex]);
 
   var barWhidth = 40; // px;
   var barHeight = 255; // px;
