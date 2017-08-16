@@ -1,8 +1,5 @@
 'use strict';
 
-
-
-
 window.renderStatistics = function (ctx, names, times) {
   var cloudColor = {
     cloud: 'rgba(256, 256, 256, 1.0)',
