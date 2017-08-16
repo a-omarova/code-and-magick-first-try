@@ -1,19 +1,42 @@
 'use strict';
 
+
+
+
 window.renderStatistics = function (ctx, names, times) {
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-  ctx.strokeRect(110, 20, 420, 270);
-  ctx.fillRect(110, 20, 420, 270);
+  var cloudColor = {
+    cloud: 'rgba(256, 256, 256, 1.0)',
+    shadow: 'rgba(0, 0, 0, 0.7)'
+  };
 
-  ctx.fillStyle = 'rgba(256, 256, 256, 1.0)';
-  ctx.strokeRect(100, 10, 420, 270);
-  ctx.fillRect(100, 10, 420, 270);
+  var cloud = {
+    x: 100,
+    y: 10,
+    width: 420,
+    height: 270,
+    shadowX: 110,
+    shadowY: 20
+  };
 
-  ctx.fillStyle = '#000';
-  ctx.font = '16px PT Mono';
+  var title = {
+    color: '#000000',
+    font: '16px PT Mono',
+    text: {
+      str1: 'Ура вы победили!',
+      str2: 'Список результатов:'
+    },
+    textX: {
+      str1: 220,
+      str2: 210
+    },
+    textY: {
+      str1: 40,
+      str2: 60
+    }
+  };
 
-  ctx.fillText('Ура вы победили!', 220, 40);
-  ctx.fillText('Список результатов:', 210, 60);
+  drawCloud(ctx, cloudColor, cloud);
+  drawTitle(ctx, title);
 
   var max = -1;
 
@@ -25,9 +48,9 @@ window.renderStatistics = function (ctx, names, times) {
   }
 
   var histogramHeight = 150; // px;
-  var step = histogramHeight / (max - 0); // px;
+  var step = histogramHeight / max; // px;
 
-  var barWhidth = 40; // px;
+  var barWidth = 40; // px;
   var barHeight = 255; // px;
   var indent = 90; // px;
   var initialX = 155; // px;
@@ -35,12 +58,13 @@ window.renderStatistics = function (ctx, names, times) {
 
   ctx.textBaseline = 'top'; // положение надписи от левого верхнего угла
 
+
   for (i = 0; i < times.length; i++) {
-    ctx.fillStyle = 'rgba(0, 0, 250,' + String(Math.random()) + ')';
+    ctx.fillStyle = 'rgba(0, 0, 250,' + getRandom() + ')';
     if (names[i] === 'Вы') {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
     }
-    ctx.fillRect(initialX + indent * i, initialY + (histogramHeight - (times[i] * step)), barWhidth, times[i] * step);
+    ctx.fillRect(initialX + indent * i, initialY + (histogramHeight - (times[i] * step)), barWidth, times[i] * step);
 
     ctx.fillStyle = 'rgba(0, 0, 0, 1)';
     ctx.fillText(names[i], initialX + indent * i, barHeight);
@@ -48,5 +72,30 @@ window.renderStatistics = function (ctx, names, times) {
   }
 
 };
+
+
+function drawCloud(ctx, color, cloud) {
+  ctx.fillStyle = color.shadow;
+  ctx.strokeRect(cloud.shadowX, cloud.shadowY, cloud.width, cloud.height);
+  ctx.fillRect(cloud.shadowX, cloud.shadowY, cloud.width, cloud.height);
+
+  ctx.fillStyle = color.cloud;
+  ctx.strokeRect(cloud.x, cloud.y, cloud.width, cloud.height);
+  ctx.fillRect(cloud.x, cloud.y, cloud.width, cloud.height);
+}
+
+function drawTitle(ctx, title) {
+  ctx.fillStyle = title.color;
+  ctx.font = title.font;
+
+  ctx.fillText(title.text.str1, title.textX.str1, title.textY.str1);
+  ctx.fillText(title.text.str2, title.textX.str2, title.textY.str2);
+}
+
+
+function getRandom() {
+  var n = Math.random();
+  return n.toFixed(1);
+}
 
 
