@@ -45,7 +45,8 @@ window.renderStatistics = function (ctx, names, times) {
   // ctx.fillText(names[0], initialX, initialY + histogramHeight);
 
   for (i = 0; i < times.length; i++) {
-    ctx.fillRect(initialX + indent * i, initialY, barWhidth, times[i] * step);
+    ctx.fillRect(initialX + indent * i, initialY + (histogramHeight - (times[i] * step)), barWhidth, times[i] * step);
+    ctx.fillText(names[i], initialX + indent * i, barHeight);
     ctx.fillText(names[i], initialX + indent * i, barHeight);
   //   ctx.fillRect(initialX + indent * i, initialY, times[i] * step, barHeigth);
   //   ctx.fillText(names[i], initialX + indent * i, initialY + histogramWidth);
