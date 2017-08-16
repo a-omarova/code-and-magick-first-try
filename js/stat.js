@@ -26,8 +26,8 @@ var titleData = {
     str2: 210
   },
   textY: {
-    str1: 40,
-    str2: 60
+    str1: 35,
+    str2: 55
   }
 };
 
@@ -35,30 +35,7 @@ window.renderStatistics = function (ctx, names, times) {
   drawCloud(ctx, cloudColor, cloudPosition);
   drawTitle(ctx, titleData);
 
-  var histogramHeight = 150; // px;
-  var step = histogramHeight / getMaxTime(times); // px;
-
-  var barWidth = 40; // px;
-  var barHeight = 255; // px;
-  var indent = 90; // px;
-  var initialX = 155; // px;
-  var initialY = 100; // px;
-
-  ctx.textBaseline = 'top'; // положение надписи от левого верхнего угла
-
-
-  for (var i = 0; i < times.length; i++) {
-    ctx.fillStyle = 'rgba(0, 0, 250,' + getRandomBlueColor() + ')';
-    if (names[i] === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-    }
-    ctx.fillRect(initialX + indent * i, initialY + (histogramHeight - (times[i] * step)), barWidth, times[i] * step);
-
-    ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-    ctx.fillText(names[i], initialX + indent * i, barHeight);
-    ctx.fillText(Math.floor(times[i]), initialX + indent * i, initialY + (histogramHeight - (times[i] * step)) - 20);
-  }
-
+  drawHistogram(ctx, names, times);
 };
 
 
@@ -96,6 +73,37 @@ function getMaxTime(times) {
     }
   }
   return max;
+}
+
+function drawHistogram(ctx, names, times) {
+  var histogramHeight = 150;
+  var step = histogramHeight / getMaxTime(times);
+
+  var barWidth = 40;
+  var barHeight = 255;
+  var indent = 90;
+  var initialX = 155;
+  var initialY = 100;
+  var textTopMargin = 20;
+
+  ctx.textBaseline = 'top'; // положение надписи от левого верхнего угла
+
+
+  for (var i = 0; i < times.length; i++) {
+
+    var topIndentToBar = histogramHeight - (times[i] * step);
+
+    ctx.fillStyle = 'rgba(0, 0, 250,' + getRandomBlueColor() + ')';
+
+    if (names[i] === 'Вы') {
+      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+    }
+    ctx.fillRect(initialX + indent * i, initialY + topIndentToBar, barWidth, times[i] * step);
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+    ctx.fillText(names[i], initialX + indent * i, barHeight);
+    ctx.fillText(Math.floor(times[i]), initialX + indent * i, initialY + topIndentToBar - textTopMargin);
+  }
 }
 
 
