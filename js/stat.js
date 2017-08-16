@@ -1,51 +1,42 @@
 'use strict';
 
-window.renderStatistics = function (ctx, names, times) {
-  var cloudColor = {
-    cloud: 'rgba(256, 256, 256, 1.0)',
-    shadow: 'rgba(0, 0, 0, 0.7)'
-  };
+var cloudColor = {
+  cloud: 'rgba(256, 256, 256, 1.0)',
+  shadow: 'rgba(0, 0, 0, 0.7)'
+};
 
-  var cloud = {
-    x: 100,
-    y: 10,
-    width: 420,
-    height: 270,
-    shadowX: 110,
-    shadowY: 20
-  };
+var cloudPosition = {
+  x: 100,
+  y: 10,
+  width: 420,
+  height: 270,
+  shadowX: 110,
+  shadowY: 20
+};
 
-  var title = {
-    color: '#000000',
-    font: '16px PT Mono',
-    text: {
-      str1: 'Ура вы победили!',
-      str2: 'Список результатов:'
-    },
-    textX: {
-      str1: 220,
-      str2: 210
-    },
-    textY: {
-      str1: 40,
-      str2: 60
-    }
-  };
-
-  drawCloud(ctx, cloudColor, cloud);
-  drawTitle(ctx, title);
-
-  var max = -1;
-
-  for (var i = 0; i < times.length; i++) {
-    var time = times[i];
-    if (time > max) {
-      max = time;
-    }
+var titleData = {
+  color: '#000000',
+  font: '16px PT Mono',
+  text: {
+    str1: 'Ура вы победили!',
+    str2: 'Список результатов:'
+  },
+  textX: {
+    str1: 220,
+    str2: 210
+  },
+  textY: {
+    str1: 40,
+    str2: 60
   }
+};
+
+window.renderStatistics = function (ctx, names, times) {
+  drawCloud(ctx, cloudColor, cloudPosition);
+  drawTitle(ctx, titleData);
 
   var histogramHeight = 150; // px;
-  var step = histogramHeight / max; // px;
+  var step = histogramHeight / getMaxTime(times); // px;
 
   var barWidth = 40; // px;
   var barHeight = 255; // px;
@@ -56,8 +47,8 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.textBaseline = 'top'; // положение надписи от левого верхнего угла
 
 
-  for (i = 0; i < times.length; i++) {
-    ctx.fillStyle = 'rgba(0, 0, 250,' + getRandom() + ')';
+  for (var i = 0; i < times.length; i++) {
+    ctx.fillStyle = 'rgba(0, 0, 250,' + getRandomBlueColor() + ')';
     if (names[i] === 'Вы') {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
     }
@@ -90,9 +81,21 @@ function drawTitle(ctx, title) {
 }
 
 
-function getRandom() {
+function getRandomBlueColor() {
   var n = Math.random();
   return n.toFixed(1);
+}
+
+function getMaxTime(times) {
+  var max = -1;
+
+  for (var i = 0; i < times.length; i++) {
+    var time = times[i];
+    if (time > max) {
+      max = time;
+    }
+  }
+  return max;
 }
 
 
