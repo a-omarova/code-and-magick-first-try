@@ -12,8 +12,8 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.fillStyle = '#000';
   ctx.font = '16px PT Mono';
 
-  ctx.fillText('Ура вы победили!', 120, 40);
-  ctx.fillText('Список результатов:', 120, 60);
+  ctx.fillText('Ура вы победили!', 220, 40);
+  ctx.fillText('Список результатов:', 210, 60);
 
   var max = -1;
   var maxIndex = -1;
@@ -28,28 +28,27 @@ window.renderStatistics = function (ctx, names, times) {
 
   var histogramHeight = 150; // px;
   var step = histogramHeight / (max - 0); // px;
-  console.log(step);
+  // console.log(step);
+  // console.log('Худшее время: ', max, 'мс у игрока ', names[maxIndex]);
 
-  // ctx.fillText('Худшее время: ' + max.toFixed(2) + 'мс у игрока ' + names[maxIndex], 120, 60);
-  console.log('Худшее время: ', max, 'мс у игрока ', names[maxIndex]);
-
-  var barWhidth = 30; // px;
-  var barHeight = 240; // px;
-  var indent = 80; // px;
-  var initialX = 170; // px;
-  var initialY = 80; // px;
+  var barWhidth = 40; // px;
+  var barHeight = 255; // px;
+  var indent = 90; // px;
+  var initialX = 155; // px;
+  var initialY = 100; // px;
 
   ctx.textBaseline = 'top'; // положение надписи от левого верхнего угла
 
-  // ctx.fillRect(initialX, initialY, 20, barHeigth);
-  // ctx.fillText(names[0], initialX, initialY + histogramHeight);
-
   for (i = 0; i < times.length; i++) {
+    ctx.fillStyle = 'rgba(0, 0, 250,' + String(Math.random()) + ')';
+    if (names[i] === 'Вы') {
+      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+    }
     ctx.fillRect(initialX + indent * i, initialY + (histogramHeight - (times[i] * step)), barWhidth, times[i] * step);
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 1)';
     ctx.fillText(names[i], initialX + indent * i, barHeight);
-    ctx.fillText(names[i], initialX + indent * i, barHeight);
-  //   ctx.fillRect(initialX + indent * i, initialY, times[i] * step, barHeigth);
-  //   ctx.fillText(names[i], initialX + indent * i, initialY + histogramWidth);
+    ctx.fillText(Math.floor(times[i]), initialX + indent * i, initialY + (histogramHeight - (times[i] * step)) - 20);
   }
 
 };
