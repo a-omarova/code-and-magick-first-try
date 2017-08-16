@@ -33,20 +33,23 @@ window.renderStatistics = function (ctx, names, times) {
   // ctx.fillText('Худшее время: ' + max.toFixed(2) + 'мс у игрока ' + names[maxIndex], 120, 60);
   console.log('Худшее время: ', max, 'мс у игрока ', names[maxIndex]);
 
-  var barHeigth = 150; // px;
-  var indent = 50; // px;
-  var initialX = 120; // px;
+  var barWhidth = 30; // px;
+  var barHeight = 240; // px;
+  var indent = 80; // px;
+  var initialX = 170; // px;
   var initialY = 80; // px;
 
   ctx.textBaseline = 'top'; // положение надписи от левого верхнего угла
 
-  ctx.fillRect(initialX, initialY, barHeigth, times[0] * step);
-  ctx.fillText(names[0], initialX, initialY + histogramHeight);
+  // ctx.fillRect(initialX, initialY, 20, barHeigth);
+  // ctx.fillText(names[0], initialX, initialY + histogramHeight);
 
-  // for (i = 0; i < times.length; i++) {
+  for (i = 0; i < times.length; i++) {
+    ctx.fillRect(initialX + indent * i, initialY, barWhidth, times[i] * step);
+    ctx.fillText(names[i], initialX + indent * i, barHeight);
   //   ctx.fillRect(initialX + indent * i, initialY, times[i] * step, barHeigth);
   //   ctx.fillText(names[i], initialX + indent * i, initialY + histogramWidth);
-  // }
+  }
 
 };
 
