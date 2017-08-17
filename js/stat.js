@@ -17,25 +17,36 @@ var cloudPosition = {
 var titleData = {
   color: '#000000',
   font: '16px PT Mono',
-  text: {
-    str1: 'Ура вы победили!',
-    str2: 'Список результатов:'
+  str1: {
+    text: 'Ура вы победили!',
+    textX: 220,
+    textY: 35
   },
-  textX: {
-    str1: 220,
-    str2: 210
-  },
-  textY: {
-    str1: 35,
-    str2: 55
+  str2: {
+    text: 'Список результатов:',
+    textX: 210,
+    textY: 55
   }
+};
+
+var histogram = {
+  height: 150,
+  columnWidth: 40,
+  indent: 60,
+  firstColumnX: 150,
+  firstColumnY: 100,
+  textTopMargin: 20,
+  textBaseline: 'top',
+  playerColor: 'rgba(255, 0, 0, 1)',
+  textColor: 'rgba(0, 0, 0, 1)',
+  textY: 255
 };
 
 window.renderStatistics = function (ctx, names, times) {
   drawCloud(ctx, cloudColor, cloudPosition);
   drawTitle(ctx, titleData);
 
-  drawHistogram(ctx, names, times);
+  drawHistogram(ctx, names, times, histogram);
 };
 
 
@@ -49,18 +60,17 @@ function drawCloud(ctx, color, cloud) {
   ctx.fillRect(cloud.x, cloud.y, cloud.width, cloud.height);
 }
 
-function drawTitle(ctx, title) {
-  ctx.fillStyle = title.color;
-  ctx.font = title.font;
+function drawTitle(ctx, stringParams) {
+  ctx.fillStyle = stringParams.color;
+  ctx.font = stringParams.font;
 
-  ctx.fillText(title.text.str1, title.textX.str1, title.textY.str1);
-  ctx.fillText(title.text.str2, title.textX.str2, title.textY.str2);
+  ctx.fillText(stringParams.str1.text, stringParams.str1.textX, stringParams.str1.textY);
+  ctx.fillText(stringParams.str2.text, stringParams.str2.textX, stringParams.str2.textY);
 }
-
 
 function getRandomBlueColor() {
   var n = Math.random();
-  return n.toFixed(1);
+  return 'rgba(0, 0, 250,' + n.toFixed(1) + ')';
 }
 
 function getMaxTime(times) {
@@ -75,35 +85,28 @@ function getMaxTime(times) {
   return max;
 }
 
-function drawHistogram(ctx, names, times) {
-  var histogramHeight = 150;
-  var step = histogramHeight / getMaxTime(times);
-
-  var barWidth = 40;
-  var barHeight = 255;
-  var indent = 90;
-  var initialX = 155;
-  var initialY = 100;
-  var textTopMargin = 20;
-
-  ctx.textBaseline = 'top'; // положение надписи от левого верхнего угла
+function drawHistogram(ctx, names, times, histogramData) {
+  var step = histogramData.height / getMaxTime(times);
+  ctx.textBaseline = histogramData.textBaseline;
 
 
   for (var i = 0; i < times.length; i++) {
+    var topIndentToColumn = histogramData.height - (times[i] * step);
+    var x = histogramData.firstColumnX + histogramData.columnWidth + histogramData.indent * i;
+    var y = histogramData.firstColumnY + topIndentToColumn;
+    var columnHeight = times[i] * step;
 
-    var topIndentToBar = histogramHeight - (times[i] * step);
-
-    ctx.fillStyle = 'rgba(0, 0, 250,' + getRandomBlueColor() + ')';
+    ctx.fillStyle = getRandomBlueColor();
 
     if (names[i] === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+      ctx.fillStyle = histogramData.playerColor;
     }
-    ctx.fillRect(initialX + indent * i, initialY + topIndentToBar, barWidth, times[i] * step);
 
-    ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-    ctx.fillText(names[i], initialX + indent * i, barHeight);
-    ctx.fillText(Math.floor(times[i]), initialX + indent * i, initialY + topIndentToBar - textTopMargin);
+    ctx.fillRect(x, y, histogramData.columnWidth, columnHeight);
+
+    ctx.fillStyle = histogramData.textColor;
+
+    ctx.fillText(names[i], x, histogramData.textY);
+    ctx.fillText(Math.floor(times[i]), x, y - histogramData.textTopMargin);
   }
 }
-
-
