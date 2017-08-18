@@ -85,28 +85,31 @@ function getMaxTime(times) {
   return max;
 }
 
+function drawColumn(ctx, histogramData, times, names, step, i) {
+  var topIndentToColumn = histogramData.height - (times[i] * step);
+  var x = histogramData.firstColumnX + histogramData.columnWidth + histogramData.indent * i;
+  var y = histogramData.firstColumnY + topIndentToColumn;
+  var columnHeight = times[i] * step;
+
+  ctx.fillStyle = getRandomBlueColor();
+
+  if (names[i] === 'Вы') {
+    ctx.fillStyle = histogramData.playerColor;
+  }
+
+  ctx.fillRect(x, y, histogramData.columnWidth, columnHeight);
+
+  ctx.fillStyle = histogramData.textColor;
+
+  ctx.fillText(names[i], x, histogramData.textY);
+  ctx.fillText(Math.floor(times[i]), x, y - histogramData.textTopMargin);
+}
+
 function drawHistogram(ctx, names, times, histogramData) {
   var step = histogramData.height / getMaxTime(times);
   ctx.textBaseline = histogramData.textBaseline;
 
-
   for (var i = 0; i < times.length; i++) {
-    var topIndentToColumn = histogramData.height - (times[i] * step);
-    var x = histogramData.firstColumnX + histogramData.columnWidth + histogramData.indent * i;
-    var y = histogramData.firstColumnY + topIndentToColumn;
-    var columnHeight = times[i] * step;
-
-    ctx.fillStyle = getRandomBlueColor();
-
-    if (names[i] === 'Вы') {
-      ctx.fillStyle = histogramData.playerColor;
-    }
-
-    ctx.fillRect(x, y, histogramData.columnWidth, columnHeight);
-
-    ctx.fillStyle = histogramData.textColor;
-
-    ctx.fillText(names[i], x, histogramData.textY);
-    ctx.fillText(Math.floor(times[i]), x, y - histogramData.textTopMargin);
+    drawColumn(ctx, histogramData, times, names, step, i);
   }
 }
